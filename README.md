@@ -73,7 +73,7 @@ npm install chess-engine
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/Sandervg03/ChessEngine.git
 cd ChessEngine
 npm install
 npm run build
