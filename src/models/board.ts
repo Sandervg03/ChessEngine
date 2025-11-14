@@ -19,16 +19,24 @@ export class Board {
         piece.coordinate.y === coordinate.y
     );
   }
-  
+
+  public getPieceAt(coordinate: Coordinate): Piece | undefined {
+    return this._pieces.find(
+      (piece) =>
+        piece.coordinate.x === coordinate.x &&
+        piece.coordinate.y === coordinate.y
+    );
+  }
+
   public get xSize(): number {
-    return this._xSize
+    return this._xSize;
   }
 
   public get ySize(): number {
-    return this._ySize
+    return this._ySize;
   }
 
   public get pieces(): Piece[] {
-    return this._pieces
+    return this._pieces;
   }
 }

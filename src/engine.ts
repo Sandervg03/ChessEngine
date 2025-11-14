@@ -19,12 +19,21 @@ export class ChessEngine {
       return false;
     }
 
-    const moves = piece.getDefaultMoves(this.board)
+    const moves = piece.getDefaultMoves(this.board);
 
-    if (moves.includes(new Move(piece, from, to))) {
-        piece.coordinate = to;
+    const isValidMove = moves.some(
+      (move) =>
+        move.from.x === from.x &&
+        move.from.y === from.y &&
+        move.to.x === to.x &&
+        move.to.y === to.y
+    );
+
+    if (isValidMove) {
+      piece.coordinate = to;
+      return true;
     }
 
-    return true;
+    return false;
   }
 }
