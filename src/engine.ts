@@ -3,7 +3,7 @@ import { Coordinate } from "./models/coordinate";
 import { Move } from "./models/move";
 
 export class ChessEngine {
-  private board: Board;
+  board: Board;
 
   constructor(board: Board) {
     this.board = board;
