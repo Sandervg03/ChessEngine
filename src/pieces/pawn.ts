@@ -6,6 +6,7 @@ import { Piece } from "./piece";
 export class Pawn implements Piece {
     private _color!: string;
     private _coordinate!: Coordinate;
+    private _name: string;
     
     private direction = this.color === 'white' ? -1 : 1;
     private startRow = this.color === 'white' ? 7 : 2;
@@ -13,6 +14,7 @@ export class Pawn implements Piece {
     constructor(color: string, coordinate: Coordinate) {
         this.color = color;
         this.coordinate = coordinate;
+        this._name = "pawn"
     }
 
     public get color(): string {
@@ -21,6 +23,10 @@ export class Pawn implements Piece {
     
     public get coordinate(): Coordinate {
         return this._coordinate;
+    }
+
+    public get name(): string {
+        return this._name;
     }
 
     private set color(color: string) {
