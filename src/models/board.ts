@@ -27,4 +27,8 @@ export class Board {
   public get ySize(): number {
     return this._ySize
   }
+
+  public get pieces(): Piece[] {
+    return this._pieces
+  }
 }

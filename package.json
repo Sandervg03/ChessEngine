@@ -1,0 +1,30 @@
+{
+  "name": "ts-chess-engine",
+  "version": "1.0.0",
+  "description": "A modern, object-oriented chess engine built with TypeScript",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "chess",
+    "chess-engine",
+    "ts-chess-engine",
+    "typescript",
+    "game",
+    "board-game"
+  ],
+  "author": "Sandervg03",
+  "repository": "https://github.com/Sandervg03/ChessEngine",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
+

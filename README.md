@@ -63,10 +63,39 @@ ChessEngine/
 
 ### Installation
 
+#### NPM Package
+
+```bash
+npm install chess-engine
+```
+
+#### From Source
+
 ```bash
 # Clone the repository
 git clone <repository-url>
 cd ChessEngine
+npm install
+npm run build
+```
+
+### Usage
+
+```typescript
+import { ChessEngine, Board, Coordinate } from "chess-engine";
+
+// Create a board with pieces
+const board = new Board([
+  /* your pieces */
+]);
+
+// Create the engine
+const engine = new ChessEngine(board);
+
+// Make a move
+const from = new Coordinate(1, 1);
+const to = new Coordinate(1, 3);
+const success = engine.move(from, to);
 ```
 
 ## 📚 Key Features

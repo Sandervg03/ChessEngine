@@ -1,6 +1,6 @@
 export class Coordinate {
-    private _x: number;
-    private _y: number;
+    private _x!: number;
+    private _y!: number;
 
     constructor(x: number, y: number) {
         this.x = x;

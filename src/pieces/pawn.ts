@@ -4,8 +4,8 @@ import { Move } from "../models/move";
 import { Piece } from "./piece";
 
 export class Pawn implements Piece {
-    private _color: string;
-    private _coordinate: Coordinate;
+    private _color!: string;
+    private _coordinate!: Coordinate;
     
     private direction = this.color === 'white' ? -1 : 1;
     private startRow = this.color === 'white' ? 7 : 2;
