@@ -30,6 +30,9 @@ export class ChessEngine {
     );
 
     if (isValidMove) {
+      if (this.board.getPieceAt(to)) {
+        this.board.removePiece(to)
+      }
       piece.coordinate = to;
       return true;
     }

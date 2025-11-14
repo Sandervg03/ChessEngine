@@ -28,6 +28,19 @@ export class Board {
     );
   }
 
+  public removePiece(coordinate: Coordinate): boolean {
+    const piece = this.getPieceAt(coordinate);
+    if (!piece) {
+      return false;
+    }
+  
+    const index = this._pieces.indexOf(piece);
+    this._pieces.splice(index, 1);
+  
+    return true;
+  }
+  
+
   public get xSize(): number {
     return this._xSize;
   }
