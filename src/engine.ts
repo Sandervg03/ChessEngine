@@ -30,11 +30,17 @@ export class ChessEngine {
         move.to.y === to.y
     );
 
-    const pickedMove = moves.find(move => move.from === from && move.to === to)
+    const pickedMove = moves.find(
+      (move) =>
+        move.from.x === from.x &&
+        move.from.y === from.y &&
+        move.to.x === to.x &&
+        move.to.y === to.y
+    );    
 
     if (isValidMove) {
       if (pickedMove?.special === "en passant") {
-        this.board.removePiece(new Coordinate(to.x, to.y + pickedMove.piece.direction))
+        this.board.removePiece(new Coordinate(to.x, to.y - pickedMove.piece.direction))
       }
 
       if (this.board.getPieceAt(to)) {
