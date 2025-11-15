@@ -8,11 +8,11 @@ export class Pawn implements Piece {
   private _coordinate!: Coordinate;
   private _name: string;
 
-  private get direction(): number {
+  public get direction(): number {
     return this.color === "white" ? 1 : -1;
   }
 
-  private get startRow(): number {
+  public get startRow(): number {
     return this.color === "white" ? 7 : 2;
   }
 
@@ -42,7 +42,7 @@ export class Pawn implements Piece {
     this._coordinate = coordinate;
   }
 
-  public getDefaultMoves(board: Board): Move[] {
+  public getDefaultMoves(board: Board, lastMove?: Move): Move[] {
     const moves: Move[] = [];
 
     if (
@@ -94,6 +94,16 @@ export class Pawn implements Piece {
       moves.push(new Move(this, this.coordinate, leftCaptureCoord));
     }
 
+    if (
+      lastMove?.piece.name === "pawn" &&
+      lastMove.piece.color !== this.color &&
+      lastMove.from.y === lastMove.piece.startRow &&
+      lastMove.from.y - lastMove.to.y === lastMove.piece.direction * 2 &&
+      (lastMove.to.x === this.coordinate.x + 1 ||
+        lastMove.to.x === this.coordinate.x - 1)
+    ) {
+      moves.push(new Move(this, this.coordinate, lastMove.to));
+    }
     return moves;
   }
 }

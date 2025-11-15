@@ -4,6 +4,7 @@ import { Move } from "./models/move";
 
 export class ChessEngine {
   board: Board;
+  lastMove?: Move;
 
   constructor(board: Board) {
     this.board = board;
@@ -19,7 +20,7 @@ export class ChessEngine {
       return false;
     }
 
-    const moves = piece.getDefaultMoves(this.board);
+    const moves = piece.getDefaultMoves(this.board, this.lastMove);
 
     const isValidMove = moves.some(
       (move) =>
@@ -34,6 +35,7 @@ export class ChessEngine {
         this.board.removePiece(to)
       }
       piece.coordinate = to;
+      this.lastMove = new Move(piece, from, to)
       return true;
     }
 

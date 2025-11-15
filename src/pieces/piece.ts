@@ -6,6 +6,9 @@ export interface Piece {
     color: string;
     coordinate: Coordinate;
     name: string;
+    
+    startRow: number;
+    direction: number;
 
-    getDefaultMoves(board: Board): Move[]
+    getDefaultMoves(board: Board, lastMove?: Move): Move[]
 }
