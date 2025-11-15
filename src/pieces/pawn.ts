@@ -98,11 +98,11 @@ export class Pawn implements Piece {
       lastMove?.piece.name === "pawn" &&
       lastMove.piece.color !== this.color &&
       lastMove.from.y === lastMove.piece.startRow &&
-      lastMove.from.y - lastMove.to.y === lastMove.piece.direction * 2 &&
+      lastMove.to.y - lastMove.from.y === lastMove.piece.direction * 2 &&
       (lastMove.to.x === this.coordinate.x + 1 ||
         lastMove.to.x === this.coordinate.x - 1)
     ) {
-      moves.push(new Move(this, this.coordinate, lastMove.to));
+      moves.push(new Move(this, this.coordinate, new Coordinate(lastMove.to.x, lastMove.to.y + this.direction), "en passant"));
     }
     return moves;
   }

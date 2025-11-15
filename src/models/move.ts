@@ -5,11 +5,13 @@ export class Move {
     private _piece: Piece;
     private _from: Coordinate;
     private _to: Coordinate;
+    private _special?: string;
 
-    constructor(piece: Piece, from: Coordinate, to: Coordinate) {
+    constructor(piece: Piece, from: Coordinate, to: Coordinate, special?: string) {
         this._piece = piece;
         this._from = from;
         this._to = to;
+        this._special = special;
     }
 
     public get piece(): Piece {
@@ -22,5 +24,9 @@ export class Move {
 
     public get to(): Coordinate {
         return this._to;
+    }
+
+    public get special(): string | undefined {
+        return this._special
     }
 }
