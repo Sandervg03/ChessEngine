@@ -13,7 +13,7 @@ export class Pawn implements Piece {
   }
 
   public get startRow(): number {
-    return this.color === "white" ? 7 : 2;
+    return this.color === "white" ? 2 : 7;
   }
 
   constructor(color: string, coordinate: Coordinate) {
