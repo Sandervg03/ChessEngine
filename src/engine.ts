@@ -11,10 +11,7 @@ export class ChessEngine {
   }
 
   move(from: Coordinate, to: Coordinate): boolean {
-    const piece = this.board.pieces.find(
-      (boardPiece) =>
-        boardPiece.coordinate.x === from.x && boardPiece.coordinate.y === from.y
-    );
+    const piece = this.board.getPieceAt(to);
 
     if (!piece) {
       return false;
@@ -36,22 +33,36 @@ export class ChessEngine {
         move.from.y === from.y &&
         move.to.x === to.x &&
         move.to.y === to.y
-    );    
+    );
 
     if (isValidMove) {
       if (pickedMove?.special === "en passant") {
-        this.board.removePiece(new Coordinate(to.x, to.y - pickedMove.piece.direction))
+        this.board.removePiece(
+          new Coordinate(to.x, to.y - pickedMove.piece.direction)
+        );
       }
 
       if (this.board.getPieceAt(to)) {
-        this.board.removePiece(to)
+        this.board.removePiece(to);
       }
-      
+
       piece.coordinate = to;
-      this.lastMove = new Move(piece, from, to)
+      this.lastMove = new Move(piece, from, to);
       return true;
     }
 
     return false;
+  }
+
+  previewMoves(from: Coordinate): Coordinate[] {
+    const piece = this.board.getPieceAt(from);
+
+    if (!piece) {
+      return [];
+    }
+
+    return piece
+      .getDefaultMoves(this.board, this.lastMove)
+      .map((move) => move.to);
   }
 }
