@@ -48,7 +48,9 @@ export class Pawn implements Piece {
     if (
       board.coordinateIsEmpty(
         new Coordinate(this.coordinate.x, this.coordinate.y + this.direction)
-      )
+      ) && this.color === "white"
+        ? this.coordinate.y + this.direction < 9
+        : this.coordinate.y + this.direction > 0
     ) {
       moves.push(
         new Move(
@@ -102,7 +104,14 @@ export class Pawn implements Piece {
       (lastMove.to.x === this.coordinate.x + 1 ||
         lastMove.to.x === this.coordinate.x - 1)
     ) {
-      moves.push(new Move(this, this.coordinate, new Coordinate(lastMove.to.x, lastMove.to.y + this.direction), "en passant"));
+      moves.push(
+        new Move(
+          this,
+          this.coordinate,
+          new Coordinate(lastMove.to.x, lastMove.to.y + this.direction),
+          "en passant"
+        )
+      );
     }
     return moves;
   }
