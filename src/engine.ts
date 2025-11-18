@@ -13,6 +13,10 @@ export class ChessEngine {
   move(from: Coordinate, to: Coordinate): boolean {
     const piece = this.board.getPieceAt(from);
 
+    if (this.lastMove?.piece.color === piece?.color) {
+      return false;
+    }
+
     if (!piece) {
       return false;
     }
