@@ -4,25 +4,25 @@ import { Move } from "../models/move";
 import { Piece } from "./piece";
 
 export class Pawn implements Piece {
-  private _color!: string;
+  private _color!: PieceColor;
   private _coordinate!: Coordinate;
-  private _name: string;
+  private _name: PieceName;
 
   public get direction(): number {
-    return this.color === "white" ? 1 : -1;
+    return this.color === PieceColor.white ? 1 : -1;
   }
 
   public get startRow(): number {
-    return this.color === "white" ? 2 : 7;
+    return this.color === PieceColor.white ? 2 : 7;
   }
 
-  constructor(color: string, coordinate: Coordinate) {
+  constructor(color: PieceColor, coordinate: Coordinate) {
     this.color = color;
     this.coordinate = coordinate;
-    this._name = "pawn";
+    this._name = PieceName.pawn;
   }
 
-  public get color(): string {
+  public get color(): PieceColor {
     return this._color;
   }
 
@@ -30,11 +30,11 @@ export class Pawn implements Piece {
     return this._coordinate;
   }
 
-  public get name(): string {
+  public get name(): PieceName {
     return this._name;
   }
 
-  private set color(color: string) {
+  private set color(color: PieceColor) {
     this._color = color;
   }
 
@@ -48,7 +48,7 @@ export class Pawn implements Piece {
     if (
       board.coordinateIsEmpty(
         new Coordinate(this.coordinate.x, this.coordinate.y + this.direction)
-      ) && this.color === "white"
+      ) && this.color === PieceColor.white
         ? this.coordinate.y + this.direction < 9
         : this.coordinate.y + this.direction > 0
     ) {
@@ -97,7 +97,7 @@ export class Pawn implements Piece {
     }
 
     if (
-      lastMove?.piece.name === "pawn" &&
+      lastMove?.piece.name === PieceName.pawn &&
       lastMove.piece.color !== this.color &&
       lastMove.from.y === lastMove.piece.startRow &&
       lastMove.to.y - lastMove.from.y === lastMove.piece.direction * 2 &&

@@ -3,9 +3,9 @@ import { Coordinate } from "../models/coordinate";
 import { Move } from "../models/move";
 
 export interface Piece {
-    color: string;
+    color: PieceColor;
     coordinate: Coordinate;
-    name: string;
+    name: PieceName;
     
     startRow: number;
     direction: number;
