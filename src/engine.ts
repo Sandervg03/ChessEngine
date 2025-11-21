@@ -51,7 +51,9 @@ export class ChessEngine {
     );
 
     if (isValidMove) {
-      const simulatedBoard: Board = this.simulateMove(pickedMove!);
+      const tempBoard = this.board;
+
+      const simulatedBoard: Board = this.simulateMove(tempBoard, pickedMove!);
 
       let isKingChecked: boolean;
 
@@ -102,7 +104,9 @@ export class ChessEngine {
     const moves: Move[] = piece.getDefaultMoves(this.board, this.lastMove);
 
     let validMoves: Move[] = moves.filter((move) => {
-      const simulatedBoard: Board = this.simulateMove(move);
+      const tempBoard = this.board;
+
+      const simulatedBoard: Board = this.simulateMove(tempBoard, move);
 
       let isKingChecked: boolean;
 
@@ -128,12 +132,12 @@ export class ChessEngine {
     return validMoves.map((move) => new Coordinate(move.to.x, move.to.y));
   }
 
-  simulateMove(move: Move): Board {
-    let simulationPieces = this.board.pieces;
+  simulateMove(board: Board, move: Move): Board {
+    let simulationPieces = board.pieces;
     simulationPieces.find(
       (piece) => piece.coordinate.x === move.from.x && piece.coordinate.y === move.from.y,
     )!.coordinate = new Coordinate(move.to.x, move.to.y);
 
-    return new Board(simulationPieces, this.board.xSize, this.board.ySize);
+    return new Board(simulationPieces, board.xSize, board.ySize);
   }
 }
