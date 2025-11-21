@@ -1,3 +1,4 @@
 enum PieceName {
-    "pawn"
+    "pawn",
+    "king"
 }

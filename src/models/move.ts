@@ -5,9 +5,9 @@ export class Move {
     private _piece: Piece;
     private _from: Coordinate;
     private _to: Coordinate;
-    private _special?: string;
+    private _special?: SpecialMove;
 
-    constructor(piece: Piece, from: Coordinate, to: Coordinate, special?: string) {
+    constructor(piece: Piece, from: Coordinate, to: Coordinate, special?: SpecialMove) {
         this._piece = piece;
         this._from = from;
         this._to = to;
@@ -26,7 +26,7 @@ export class Move {
         return this._to;
     }
 
-    public get special(): string | undefined {
+    public get special(): SpecialMove | undefined {
         return this._special
     }
 }

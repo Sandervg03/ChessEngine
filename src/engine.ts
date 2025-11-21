@@ -1,13 +1,17 @@
-import { Board } from "./models/board";
-import { Coordinate } from "./models/coordinate";
-import { Move } from "./models/move";
+import { Board } from './models/board';
+import { Coordinate } from './models/coordinate';
+import { Move } from './models/move';
+import { King } from './pieces/king';
+import { Pawn } from './pieces/pawn';
 
 export class ChessEngine {
   board: Board;
   lastMove?: Move;
+  gameState: GameState;
 
   constructor(board: Board) {
     this.board = board;
+    this.gameState = GameState.playing;
   }
 
   move(from: Coordinate, to: Coordinate): boolean {
@@ -32,7 +36,7 @@ export class ChessEngine {
         move.from.x === from.x &&
         move.from.y === from.y &&
         move.to.x === to.x &&
-        move.to.y === to.y
+        move.to.y === to.y,
     );
 
     const pickedMove = moves.find(
@@ -40,20 +44,45 @@ export class ChessEngine {
         move.from.x === from.x &&
         move.from.y === from.y &&
         move.to.x === to.x &&
-        move.to.y === to.y
-    );    
+        move.to.y === to.y,
+    );
 
     if (isValidMove) {
-      if (pickedMove?.special === "en passant") {
-        this.board.removePiece(new Coordinate(to.x, to.y - pickedMove.piece.direction))
+      const simulatedBoard: Board = this.simulateMove(pickedMove!);
+
+      let isKingChecked: boolean;
+
+      piece.color === PieceColor.white
+        ? (
+            simulatedBoard.pieces.find(
+              (piece) => piece.color === PieceColor.white && piece instanceof King,
+            ) as King
+          ).checkingPieces(simulatedBoard, pickedMove).length > 0
+          ? (isKingChecked = true)
+          : (isKingChecked = false)
+        : (
+            simulatedBoard.pieces.find(
+              (piece) => piece.color === PieceColor.black && piece instanceof King,
+            ) as King
+          ).checkingPieces(simulatedBoard, pickedMove).length > 0
+        ? (isKingChecked = true)
+        : (isKingChecked = false);
+
+      if (isKingChecked) {
+        return false;
+      }
+
+      if (pickedMove?.special === SpecialMove['en passant'] && pickedMove.piece instanceof Pawn) {
+        this.board.removePiece(new Coordinate(to.x, to.y - pickedMove.piece.direction));
       }
 
       if (this.board.getPieceAt(to)) {
-        this.board.removePiece(to)
+        this.board.removePiece(to);
       }
-      
+
       piece.coordinate = to;
-      this.lastMove = new Move(piece, from, to)
+      this.lastMove = new Move(piece, from, to);
+
       return true;
     }
 
@@ -67,6 +96,41 @@ export class ChessEngine {
       return [];
     }
 
-    return piece.getDefaultMoves(this.board, this.lastMove).map(move => move.to);
+    const moves: Move[] = piece.getDefaultMoves(this.board, this.lastMove);
+
+    let validMoves: Move[] = moves.filter((move) => {
+      const simulatedBoard: Board = this.simulateMove(move);
+
+      let isKingChecked: boolean;
+
+      piece.color === PieceColor.white
+        ? (
+            simulatedBoard.pieces.find(
+              (piece) => piece.color === PieceColor.white && piece instanceof King,
+            ) as King
+          ).checkingPieces(simulatedBoard, move).length > 0
+          ? (isKingChecked = true)
+          : (isKingChecked = false)
+        : (
+            simulatedBoard.pieces.find(
+              (piece) => piece.color === PieceColor.black && piece instanceof King,
+            ) as King
+          ).checkingPieces(simulatedBoard, move).length > 0
+        ? (isKingChecked = true)
+        : (isKingChecked = false);
+
+      return isKingChecked;
+    });
+
+    return validMoves.map((move) => new Coordinate(move.to.x, move.to.y));
+  }
+
+  simulateMove(move: Move): Board {
+    let simulationPieces = this.board.pieces;
+    simulationPieces.find(
+      (piece) => piece.coordinate.x === move.from.x && piece.coordinate.y === move.from.y,
+    )!.coordinate = new Coordinate(move.to.x, move.to.y);
+
+    return new Board(simulationPieces, this.board.xSize, this.board.ySize);
   }
 }

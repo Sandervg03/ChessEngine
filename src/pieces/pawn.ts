@@ -97,7 +97,7 @@ export class Pawn implements Piece {
     }
 
     if (
-      lastMove?.piece.name === PieceName.pawn &&
+      lastMove?.piece instanceof Pawn &&
       lastMove.piece.color !== this.color &&
       lastMove.from.y === lastMove.piece.startRow &&
       lastMove.to.y - lastMove.from.y === lastMove.piece.direction * 2 &&
@@ -109,10 +109,11 @@ export class Pawn implements Piece {
           this,
           this.coordinate,
           new Coordinate(lastMove.to.x, lastMove.to.y + this.direction),
-          "en passant"
+          SpecialMove["en passant"]
         )
       );
     }
+
     return moves;
   }
 }
