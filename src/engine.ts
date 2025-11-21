@@ -51,9 +51,7 @@ export class ChessEngine {
     );
 
     if (isValidMove) {
-      const tempBoard = this.board;
-
-      const simulatedBoard: Board = this.simulateMove(tempBoard, pickedMove!);
+      const simulatedBoard: Board = this.simulateMove(pickedMove!);
 
       let isKingChecked: boolean;
 
@@ -104,9 +102,7 @@ export class ChessEngine {
     const moves: Move[] = piece.getDefaultMoves(this.board, this.lastMove);
 
     let validMoves: Move[] = moves.filter((move) => {
-      const tempBoard = this.board;
-
-      const simulatedBoard: Board = this.simulateMove(tempBoard, move);
+      const simulatedBoard: Board = this.simulateMove(move);
 
       let isKingChecked: boolean;
 
@@ -132,12 +128,27 @@ export class ChessEngine {
     return validMoves.map((move) => new Coordinate(move.to.x, move.to.y));
   }
 
-  simulateMove(board: Board, move: Move): Board {
-    let simulationPieces = board.pieces;
-    simulationPieces.find(
-      (piece) => piece.coordinate.x === move.from.x && piece.coordinate.y === move.from.y,
-    )!.coordinate = new Coordinate(move.to.x, move.to.y);
+  simulateMove(move: Move): Board {
+    const clonedPieces = this.board.pieces.map((p) => p.clone());
 
-    return new Board(simulationPieces, board.xSize, board.ySize);
+    const clonedBoard = new Board(clonedPieces, this.board.xSize, this.board.ySize);
+    const pieceToMove = clonedBoard.getPieceAt(move.from);
+
+    if (!pieceToMove) {
+      throw new Error('SimulateMove: piece not found on cloned board');
+    }
+
+    const targetPiece = clonedBoard.getPieceAt(move.to);
+    if (targetPiece) {
+      clonedBoard.removePiece(move.to);
+    }
+
+    if (move.special === SpecialMove['en passant'] && pieceToMove instanceof Pawn) {
+      clonedBoard.removePiece(new Coordinate(move.to.x, move.to.y - pieceToMove.direction));
+    }
+
+    pieceToMove.coordinate = new Coordinate(move.to.x, move.to.y);
+
+    return clonedBoard;
   }
 }

@@ -5,35 +5,10 @@ import { PieceColor } from "../models/pieceColor";
 import { PieceName } from "../models/pieceName";
 import { Piece } from "./piece";
 
-export class King implements Piece {
-  private _color!: PieceColor;
-  private _coordinate!: Coordinate;
-  private _name: PieceName;
-
+export class King extends Piece {
+  
   constructor(color: PieceColor, coordinate: Coordinate) {
-    this.color = color;
-    this.coordinate = coordinate;
-    this._name = PieceName.king;
-  }
-
-  public get color(): PieceColor {
-    return this._color;
-  }
-
-  public get coordinate(): Coordinate {
-    return this._coordinate;
-  }
-
-  public get name(): PieceName {
-    return this._name;
-  }
-
-  private set color(color: PieceColor) {
-    this._color = color;
-  }
-
-  private set coordinate(coordinate: Coordinate) {
-    this._coordinate = coordinate;
+    super(color, coordinate, PieceName.king)
   }
 
   checkingPieces(board: Board, lastMove?: Move): Piece[] {

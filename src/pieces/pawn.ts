@@ -6,11 +6,8 @@ import { PieceName } from "../models/pieceName";
 import { SpecialMove } from "../models/specialMove";
 import { Piece } from "./piece";
 
-export class Pawn implements Piece {
-  private _color!: PieceColor;
-  private _coordinate!: Coordinate;
-  private _name: PieceName;
-
+export class Pawn extends Piece {
+  
   public get direction(): number {
     return this.color === PieceColor.white ? 1 : -1;
   }
@@ -20,29 +17,7 @@ export class Pawn implements Piece {
   }
 
   constructor(color: PieceColor, coordinate: Coordinate) {
-    this.color = color;
-    this.coordinate = coordinate;
-    this._name = PieceName.pawn;
-  }
-
-  public get color(): PieceColor {
-    return this._color;
-  }
-
-  public get coordinate(): Coordinate {
-    return this._coordinate;
-  }
-
-  public get name(): PieceName {
-    return this._name;
-  }
-
-  private set color(color: PieceColor) {
-    this._color = color;
-  }
-
-  private set coordinate(coordinate: Coordinate) {
-    this._coordinate = coordinate;
+    super(color, coordinate, PieceName.king)
   }
 
   public getDefaultMoves(board: Board, lastMove?: Move): Move[] {
