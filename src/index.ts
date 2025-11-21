@@ -8,6 +8,7 @@ export { Move } from "./models/move";
 export { PieceName } from "./models/pieceName";
 export { PieceColor } from "./models/pieceColor";
 export { SpecialMove } from "./models/specialMove";
+export { GameState } from "./models/gameState";
 
 // Piece exports
 export { Piece } from "./pieces/piece";

@@ -1,5 +1,6 @@
 import { Board } from './models/board';
 import { Coordinate } from './models/coordinate';
+import { GameState } from './models/gameState';
 import { Move } from './models/move';
 import { PieceColor } from './models/pieceColor';
 import { SpecialMove } from './models/specialMove';
