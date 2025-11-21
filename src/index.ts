@@ -9,3 +9,4 @@ export { Move } from "./models/move";
 // Piece exports
 export { Piece } from "./pieces/piece";
 export { Pawn } from "./pieces/pawn";
+export { King } from "./pieces/king";
