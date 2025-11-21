@@ -1,6 +1,8 @@
 import { Board } from './models/board';
 import { Coordinate } from './models/coordinate';
 import { Move } from './models/move';
+import { PieceColor } from './models/pieceColor';
+import { SpecialMove } from './models/specialMove';
 import { King } from './pieces/king';
 import { Pawn } from './pieces/pawn';
 

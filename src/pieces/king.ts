@@ -1,6 +1,8 @@
 import { Board } from "../models/board";
 import { Coordinate } from "../models/coordinate";
 import { Move } from "../models/move";
+import { PieceColor } from "../models/pieceColor";
+import { PieceName } from "../models/pieceName";
 import { Piece } from "./piece";
 
 export class King implements Piece {

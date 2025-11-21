@@ -1,4 +1,4 @@
-enum SpecialMove {
+export enum SpecialMove {
     "en passant",
     "castle"
 }

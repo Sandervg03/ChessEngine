@@ -1,4 +1,4 @@
-enum PieceName {
+export enum PieceName {
     "pawn",
     "king"
 }

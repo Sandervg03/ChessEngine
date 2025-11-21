@@ -1,5 +1,6 @@
 import { Piece } from "../pieces/piece";
 import { Coordinate } from "./coordinate";
+import { SpecialMove } from "./specialMove";
 
 export class Move {
     private _piece: Piece;
