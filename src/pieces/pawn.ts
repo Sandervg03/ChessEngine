@@ -77,6 +77,7 @@ export class Pawn extends Piece {
     if (
       lastMove?.piece instanceof Pawn &&
       lastMove.piece.color !== this.color &&
+      lastMove.to.y === this.coordinate.y &&
       lastMove.from.y === lastMove.piece.startRow &&
       lastMove.to.y - lastMove.from.y === lastMove.piece.direction * 2 &&
       (lastMove.to.x === this.coordinate.x + 1 ||
