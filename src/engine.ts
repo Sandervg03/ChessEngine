@@ -122,7 +122,7 @@ export class ChessEngine {
         ? (isKingChecked = true)
         : (isKingChecked = false);
 
-      return isKingChecked;
+      return !isKingChecked;
     });
 
     return validMoves.map((move) => new Coordinate(move.to.x, move.to.y));
