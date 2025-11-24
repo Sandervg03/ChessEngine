@@ -1,5 +1,8 @@
-import { Piece } from "../pieces/piece";
-import { Coordinate } from "./coordinate";
+import { King } from '../pieces/king';
+import { Piece } from '../pieces/piece';
+import { Coordinate } from './coordinate';
+import { Move } from './move';
+import { PieceColor } from './pieceColor';
 
 export class Board {
   private _pieces: Piece[];
@@ -14,17 +17,13 @@ export class Board {
 
   public coordinateIsEmpty(coordinate: Coordinate): boolean {
     return !this._pieces.some(
-      (piece) =>
-        piece.coordinate.x === coordinate.x &&
-        piece.coordinate.y === coordinate.y
+      (piece) => piece.coordinate.x === coordinate.x && piece.coordinate.y === coordinate.y,
     );
   }
 
   public getPieceAt(coordinate: Coordinate): Piece | undefined {
     return this._pieces.find(
-      (piece) =>
-        piece.coordinate.x === coordinate.x &&
-        piece.coordinate.y === coordinate.y
+      (piece) => piece.coordinate.x === coordinate.x && piece.coordinate.y === coordinate.y,
     );
   }
 
@@ -33,13 +32,30 @@ export class Board {
     if (!piece) {
       return false;
     }
-  
+
     const index = this._pieces.indexOf(piece);
     this._pieces.splice(index, 1);
-  
+
     return true;
   }
-  
+
+  public isKingChecked(piece: Piece, move: Move): boolean {
+    return piece.color === PieceColor.white
+      ? (
+          this.pieces.find(
+            (piece) => piece.color === PieceColor.white && piece instanceof King,
+          ) as King
+        ).checkingPieces(this, move).length > 0
+        ? true
+        : false
+      : (
+          this.pieces.find(
+            (piece) => piece.color === PieceColor.black && piece instanceof King,
+          ) as King
+        ).checkingPieces(this, move).length > 0
+      ? true
+      : false;
+  }
 
   public get xSize(): number {
     return this._xSize;

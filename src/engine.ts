@@ -4,7 +4,6 @@ import { GameState } from './models/gameState';
 import { Move } from './models/move';
 import { PieceColor } from './models/pieceColor';
 import { SpecialMove } from './models/specialMove';
-import { King } from './pieces/king';
 import { Pawn } from './pieces/pawn';
 
 export class ChessEngine {
@@ -53,25 +52,7 @@ export class ChessEngine {
     if (isValidMove) {
       const simulatedBoard: Board = this.simulateMove(pickedMove!);
 
-      let isKingChecked: boolean;
-
-      piece.color === PieceColor.white
-        ? (
-            simulatedBoard.pieces.find(
-              (piece) => piece.color === PieceColor.white && piece instanceof King,
-            ) as King
-          ).checkingPieces(simulatedBoard, pickedMove).length > 0
-          ? (isKingChecked = true)
-          : (isKingChecked = false)
-        : (
-            simulatedBoard.pieces.find(
-              (piece) => piece.color === PieceColor.black && piece instanceof King,
-            ) as King
-          ).checkingPieces(simulatedBoard, pickedMove).length > 0
-        ? (isKingChecked = true)
-        : (isKingChecked = false);
-
-      if (isKingChecked) {
+      if (simulatedBoard.isKingChecked(piece, pickedMove!)) {
         return false;
       }
 
@@ -104,25 +85,7 @@ export class ChessEngine {
     let validMoves: Move[] = moves.filter((move) => {
       const simulatedBoard: Board = this.simulateMove(move);
 
-      let isKingChecked: boolean;
-
-      piece.color === PieceColor.white
-        ? (
-            simulatedBoard.pieces.find(
-              (piece) => piece.color === PieceColor.white && piece instanceof King,
-            ) as King
-          ).checkingPieces(simulatedBoard, move).length > 0
-          ? (isKingChecked = true)
-          : (isKingChecked = false)
-        : (
-            simulatedBoard.pieces.find(
-              (piece) => piece.color === PieceColor.black && piece instanceof King,
-            ) as King
-          ).checkingPieces(simulatedBoard, move).length > 0
-        ? (isKingChecked = true)
-        : (isKingChecked = false);
-
-      return !isKingChecked;
+      return !simulatedBoard.isKingChecked(piece, move);
     });
 
     return validMoves.map((move) => new Coordinate(move.to.x, move.to.y));
