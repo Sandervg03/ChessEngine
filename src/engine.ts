@@ -5,6 +5,7 @@ import { Move } from './models/move';
 import { PieceColor } from './models/pieceColor';
 import { SpecialMove } from './models/specialMove';
 import { Pawn } from './pieces/pawn';
+import { Piece } from './pieces/piece';
 
 export class ChessEngine {
   board: Board;
@@ -17,6 +18,10 @@ export class ChessEngine {
   }
 
   move(from: Coordinate, to: Coordinate): boolean {
+    if (this.gameState !== GameState.playing) {
+      return false;
+    }
+
     const piece = this.board.getPieceAt(from);
 
     if (!this.lastMove && piece?.color !== PieceColor.white) {
@@ -67,6 +72,8 @@ export class ChessEngine {
       piece.coordinate = to;
       this.lastMove = new Move(piece, from, to);
 
+      this.confirmGameState();
+
       return true;
     }
 
@@ -74,6 +81,10 @@ export class ChessEngine {
   }
 
   previewMoves(from: Coordinate): Coordinate[] {
+    if (this.gameState !== GameState.playing) {
+      return [];
+    }
+
     const piece = this.board.getPieceAt(from);
 
     if (!piece) {
@@ -113,5 +124,32 @@ export class ChessEngine {
     pieceToMove.coordinate = new Coordinate(move.to.x, move.to.y);
 
     return clonedBoard;
+  }
+
+  public confirmGameState(): void {
+    if (!this.lastMove) {
+      return;
+    }
+
+    const pieces: Piece[] =
+      this.lastMove.piece.color === PieceColor.white
+        ? this.board.pieces.filter((piece) => piece.color === PieceColor.black)
+        : this.board.pieces.filter((piece) => piece.color === PieceColor.white);
+
+    const availableCoords: Coordinate[] = pieces.flatMap((piece) =>
+      this.previewMoves(piece.coordinate),
+    );
+
+    if (!this.board.isKingChecked(pieces[0], this.lastMove)) {
+      if (availableCoords.length == 0) {
+        this.gameState = GameState.staleMate;
+      }
+
+      return;
+    }
+
+    if (availableCoords.length == 0) {
+      this.gameState = this.lastMove.piece.color === PieceColor.white ? GameState.whiteWin : GameState.blackWin
+    };
   }
 }
