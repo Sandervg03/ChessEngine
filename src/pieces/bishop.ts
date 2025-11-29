@@ -19,7 +19,7 @@ export class Bishop extends Piece {
     while (x > 0 && x <= board.xSize && y > 0 && y <= board.ySize) {
       moves.push(new Move(this, this.coordinate, new Coordinate(x, y)));
       if (board.getPieceAt(new Coordinate(x, y))) {
-        continue;
+        break;
       }
       x++;
       y++;
@@ -31,7 +31,7 @@ export class Bishop extends Piece {
     while (x > 0 && x <= board.xSize && y > 0 && y <= board.ySize) {
       moves.push(new Move(this, this.coordinate, new Coordinate(x, y)));
       if (board.getPieceAt(new Coordinate(x, y))) {
-        continue;
+        break;
       }
       x--;
       y--;
@@ -43,7 +43,7 @@ export class Bishop extends Piece {
     while (x > 0 && x <= board.xSize && y > 0 && y <= board.ySize) {
       moves.push(new Move(this, this.coordinate, new Coordinate(x, y)));
       if (board.getPieceAt(new Coordinate(x, y))) {
-        continue;
+        break;
       }
       x++;
       y--;
@@ -55,7 +55,7 @@ export class Bishop extends Piece {
     while (x > 0 && x <= board.xSize && y > 0 && y <= board.ySize) {
       moves.push(new Move(this, this.coordinate, new Coordinate(x, y)));
       if (board.getPieceAt(new Coordinate(x, y))) {
-        continue;
+        break;
       }
       x--;
       y++;
