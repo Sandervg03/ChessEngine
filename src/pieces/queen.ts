@@ -40,30 +40,30 @@ export class Queen extends Piece {
     }
 
     const diagonalDirections = [
-        { directionX:  1, directionY:  1 },
-        { directionX: -1, directionY: -1 },
-        { directionX:  1, directionY: -1 },
-        { directionX: -1, directionY:  1 },
-      ];
-    
-      for (const { directionX, directionY } of diagonalDirections) {
-        let x = this.coordinate.x + directionX;
-        let y = this.coordinate.y + directionY;
-    
-        while (x >= 1 && x <= board.xSize && y >= 1 && y <= board.ySize) {
-          const target = new Coordinate(x, y);
-          const piece = board.getPieceAt(target);
-    
-          if (piece && piece.color === this.color) break;
-    
-          moves.push(new Move(this, this.coordinate, target));
-    
-          if (piece) break;
-    
-          x += directionX;
-          y += directionY;
-        }
+      { directionX: 1, directionY: 1 },
+      { directionX: -1, directionY: -1 },
+      { directionX: 1, directionY: -1 },
+      { directionX: -1, directionY: 1 },
+    ];
+
+    for (const { directionX, directionY } of diagonalDirections) {
+      let x = this.coordinate.x + directionX;
+      let y = this.coordinate.y + directionY;
+
+      while (x >= 1 && x <= board.xSize && y >= 1 && y <= board.ySize) {
+        const target = new Coordinate(x, y);
+        const piece = board.getPieceAt(target);
+
+        if (piece && piece.color === this.color) break;
+
+        moves.push(new Move(this, this.coordinate, target));
+
+        if (piece) break;
+
+        x += directionX;
+        y += directionY;
       }
+    }
 
     return moves;
   }
