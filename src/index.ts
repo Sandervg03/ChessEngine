@@ -17,3 +17,4 @@ export { King } from "./pieces/king";
 export { Knight } from "./pieces/knight";
 export { Bishop } from "./pieces/bishop";
 export { Rook } from "./pieces/rook";
+export { Queen } from "./pieces/queen";
