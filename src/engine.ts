@@ -13,7 +13,7 @@ export class ChessEngine {
   gameState: GameState;
 
   get previousMove(): Move | undefined {
-    return this.previousMoves[this.previousMoves.length]
+    return this.previousMoves[this.previousMoves.length - 1]
   }
 
   constructor(board: Board) {
