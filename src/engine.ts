@@ -136,37 +136,43 @@ export class ChessEngine {
     const from = move.from;
     const to = move.to;
     const direction = to.x > from.x ? 1 : -1;
-
+  
     if (this.board.isKingChecked(move.piece, this.previousMoves, this.previousMove!)) {
       return false;
     }
-
+  
+    const rookX = direction === 1 ? this.board.xSize : 1;
+    const rookCoord = new Coordinate(rookX, from.y);
+    const rookPiece = this.board.getPieceAt(rookCoord);
+  
+    if (!(rookPiece instanceof Rook && rookPiece.color === move.piece.color)) {
+      return false;
+    }
+  
     let currentX = from.x + direction;
-    const endX = to.x;
-
-    while (currentX !== endX + direction) {
+    while (currentX !== rookX) {
       const checkCoord = new Coordinate(currentX, from.y);
-
+      
       if (!this.board.coordinateIsEmpty(checkCoord)) {
-        const pieceAtSquare = this.board.getPieceAt(checkCoord);
-
-        if (!(pieceAtSquare instanceof Rook && pieceAtSquare.color === move.piece.color)) {
-          return false;
-        }
+        return false;
       }
-
-      if (currentX >= Math.min(from.x, to.x) && currentX <= Math.max(from.x, to.x)) {
-        const simulatedMove = new Move(move.piece, from, checkCoord);
-        const simulatedBoard = this.simulateMove(simulatedMove);
-
-        if (simulatedBoard.isKingChecked(move.piece, this.previousMoves, simulatedMove)) {
-          return false;
-        }
-      }
-
+  
       currentX += direction;
     }
-
+  
+    currentX = from.x;
+    while (currentX !== to.x + direction) {
+      const checkCoord = new Coordinate(currentX, from.y);
+      const simulatedMove = new Move(move.piece, from, checkCoord);
+      const simulatedBoard = this.simulateMove(simulatedMove);
+  
+      if (simulatedBoard.isKingChecked(move.piece, this.previousMoves, simulatedMove)) {
+        return false;
+      }
+  
+      currentX += direction;
+    }
+  
     return true;
   }
 
