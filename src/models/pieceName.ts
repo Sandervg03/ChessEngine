@@ -3,4 +3,5 @@ export enum PieceName {
     "king",
     "knight",
     "bishop",
+    "rook"
 }
