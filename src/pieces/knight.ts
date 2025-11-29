@@ -23,7 +23,9 @@ export class Knight extends Piece {
     moves.push(new Move(this, this.coordinate, new Coordinate(this.coordinate.x - 2, this.coordinate.y - 1)))
     moves.push(new Move(this, this.coordinate, new Coordinate(this.coordinate.x - 1, this.coordinate.y - 2)))
 
-    return moves.filter(move => {
+    const inBoundMoves: Move[] = moves.filter(move => move.to.x > 0 && move.to.x <= board.xSize && move.to.y > 0 && move.to.y <= board.ySize);
+
+    return inBoundMoves.filter(move => {
         const targetPiece = board.getPieceAt(move.to);
         return !targetPiece || targetPiece.color !== this.color;
       })
