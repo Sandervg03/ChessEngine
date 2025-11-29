@@ -13,57 +13,32 @@ export class Bishop extends Piece {
   public getDefaultMoves(board: Board, lastMove?: Move): Move[] {
     const moves: Move[] = [];
 
-    let x = this.coordinate.x;
-    let y = this.coordinate.y;
-
-    while (x > 0 && x <= board.xSize && y > 0 && y <= board.ySize) {
-      moves.push(new Move(this, this.coordinate, new Coordinate(x, y)));
-      if (board.getPieceAt(new Coordinate(x, y))) {
-        break;
+    const directions = [
+      { directionX:  1, directionY:  1 },
+      { directionX: -1, directionY: -1 },
+      { directionX:  1, directionY: -1 },
+      { directionX: -1, directionY:  1 },
+    ];
+  
+    for (const { directionX, directionY } of directions) {
+      let x = this.coordinate.x + directionX;
+      let y = this.coordinate.y + directionY;
+  
+      while (x >= 1 && x <= board.xSize && y >= 1 && y <= board.ySize) {
+        const target = new Coordinate(x, y);
+        const piece = board.getPieceAt(target);
+  
+        if (piece && piece.color === this.color) break;
+  
+        moves.push(new Move(this, this.coordinate, target));
+  
+        if (piece) break;
+  
+        x += directionX;
+        y += directionY;
       }
-      x++;
-      y++;
     }
-
-    x = this.coordinate.x;
-    y = this.coordinate.y;
-
-    while (x > 0 && x <= board.xSize && y > 0 && y <= board.ySize) {
-      moves.push(new Move(this, this.coordinate, new Coordinate(x, y)));
-      if (board.getPieceAt(new Coordinate(x, y))) {
-        break;
-      }
-      x--;
-      y--;
-    }
-
-    x = this.coordinate.x;
-    y = this.coordinate.y;
-
-    while (x > 0 && x <= board.xSize && y > 0 && y <= board.ySize) {
-      moves.push(new Move(this, this.coordinate, new Coordinate(x, y)));
-      if (board.getPieceAt(new Coordinate(x, y))) {
-        break;
-      }
-      x++;
-      y--;
-    }
-
-    x = this.coordinate.x;
-    y = this.coordinate.y;
-
-    while (x > 0 && x <= board.xSize && y > 0 && y <= board.ySize) {
-      moves.push(new Move(this, this.coordinate, new Coordinate(x, y)));
-      if (board.getPieceAt(new Coordinate(x, y))) {
-        break;
-      }
-      x--;
-      y++;
-    }
-
-    return moves.filter((move) => {
-      const targetPiece = board.getPieceAt(move.to);
-      return !targetPiece || targetPiece.color !== this.color;
-    });
+  
+    return moves;
   }
 }
