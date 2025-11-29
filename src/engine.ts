@@ -159,8 +159,8 @@ export class ChessEngine {
   
       currentX += direction;
     }
-  
-    currentX = from.x;
+    
+    currentX = from.x + direction;
     while (currentX !== to.x + direction) {
       const checkCoord = new Coordinate(currentX, from.y);
       const simulatedMove = new Move(move.piece, from, checkCoord);
