@@ -19,7 +19,7 @@ export class Pawn extends Piece {
     super(color, coordinate, PieceName.pawn);
   }
 
-  public getDefaultMoves(board: Board, lastMove?: Move): Move[] {
+  public getDefaultMoves(board: Board, previousMoves: Move[], lastMove?: Move): Move[] {
     const moves: Move[] = [];
 
     const forwardCoord = new Coordinate(this.coordinate.x, this.coordinate.y + this.direction);

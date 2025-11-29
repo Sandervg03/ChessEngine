@@ -11,7 +11,7 @@ export class Knight extends Piece {
     super(color, coordinate, PieceName.knight);
   }
 
-  public getDefaultMoves(board: Board, lastMove?: Move): Move[] {
+  public getDefaultMoves(board: Board, previousMoves: Move[], lastMove?: Move): Move[] {
     const moves: Move[] = [];
 
     moves.push(new Move(this, this.coordinate, new Coordinate(this.coordinate.x + 1, this.coordinate.y + 2)))

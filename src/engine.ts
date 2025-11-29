@@ -9,8 +9,12 @@ import { Piece } from './pieces/piece';
 
 export class ChessEngine {
   board: Board;
-  lastMove?: Move;
+  previousMoves: Move[] = [];
   gameState: GameState;
+
+  get previousMove(): Move | undefined {
+    return this.previousMoves[this.previousMoves.length]
+  }
 
   constructor(board: Board) {
     this.board = board;
@@ -24,11 +28,11 @@ export class ChessEngine {
 
     const piece = this.board.getPieceAt(from);
 
-    if (!this.lastMove && piece?.color !== PieceColor.white) {
+    if (!this.previousMove && piece?.color !== PieceColor.white) {
       return false;
     }
 
-    if (this.lastMove?.piece.color === piece?.color) {
+    if (this.previousMove?.piece.color === piece?.color) {
       return false;
     }
 
@@ -36,7 +40,7 @@ export class ChessEngine {
       return false;
     }
 
-    const moves = piece.getDefaultMoves(this.board, this.lastMove);
+    const moves = piece.getDefaultMoves(this.board, this.previousMoves, this.previousMove);
 
     const isValidMove = moves.some(
       (move) =>
@@ -57,7 +61,7 @@ export class ChessEngine {
     if (isValidMove) {
       const simulatedBoard: Board = this.simulateMove(pickedMove!);
 
-      if (simulatedBoard.isKingChecked(piece, pickedMove!)) {
+      if (simulatedBoard.isKingChecked(piece, this.previousMoves, pickedMove!)) {
         return false;
       }
 
@@ -70,7 +74,7 @@ export class ChessEngine {
       }
 
       piece.coordinate = to;
-      this.lastMove = new Move(piece, from, to);
+      this.previousMoves.push(new Move(piece, from, to));
 
       this.confirmGameState();
 
@@ -91,12 +95,12 @@ export class ChessEngine {
       return [];
     }
 
-    const moves: Move[] = piece.getDefaultMoves(this.board, this.lastMove);
+    const moves: Move[] = piece.getDefaultMoves(this.board, this.previousMoves, this.previousMove);
 
     let validMoves: Move[] = moves.filter((move) => {
       const simulatedBoard: Board = this.simulateMove(move);
 
-      return !simulatedBoard.isKingChecked(piece, move);
+      return !simulatedBoard.isKingChecked(piece, this.previousMoves, move);
     });
 
     return validMoves.map((move) => new Coordinate(move.to.x, move.to.y));
@@ -127,12 +131,12 @@ export class ChessEngine {
   }
 
   public confirmGameState(): void {
-    if (!this.lastMove) {
+    if (!this.previousMove) {
       return;
     }
 
     const pieces: Piece[] =
-      this.lastMove.piece.color === PieceColor.white
+    this.previousMove.piece.color === PieceColor.white
         ? this.board.pieces.filter((piece) => piece.color === PieceColor.black)
         : this.board.pieces.filter((piece) => piece.color === PieceColor.white);
 
@@ -140,7 +144,7 @@ export class ChessEngine {
       this.previewMoves(piece.coordinate),
     );
 
-    if (!this.board.isKingChecked(pieces[0], this.lastMove)) {
+    if (!this.board.isKingChecked(pieces[0], this.previousMoves, this.previousMove)) {
       if (availableCoords.length == 0) {
         this.gameState = GameState.staleMate;
       }
@@ -149,7 +153,7 @@ export class ChessEngine {
     }
 
     if (availableCoords.length == 0) {
-      this.gameState = this.lastMove.piece.color === PieceColor.white ? GameState.whiteWin : GameState.blackWin
+      this.gameState = this.previousMove.piece.color === PieceColor.white ? GameState.whiteWin : GameState.blackWin
     };
   }
 }

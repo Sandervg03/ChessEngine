@@ -39,20 +39,20 @@ export class Board {
     return true;
   }
 
-  public isKingChecked(piece: Piece, lastMove: Move): boolean {
+  public isKingChecked(piece: Piece, previousMoves: Move[], lastMove: Move): boolean {
     return piece.color === PieceColor.white
       ? (
           this.pieces.find(
             (piece) => piece.color === PieceColor.white && piece instanceof King,
           ) as King
-        ).checkingPieces(this, lastMove).length > 0
+        ).checkingPieces(this, previousMoves, lastMove).length > 0
         ? true
         : false
       : (
           this.pieces.find(
             (piece) => piece.color === PieceColor.black && piece instanceof King,
           ) as King
-        ).checkingPieces(this, lastMove).length > 0
+        ).checkingPieces(this, previousMoves, lastMove).length > 0
       ? true
       : false;
   }

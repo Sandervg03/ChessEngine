@@ -20,5 +20,5 @@ export abstract class Piece {
     return copy;
   }
 
-  abstract getDefaultMoves(board: Board, lastMove?: Move): Move[];
+  abstract getDefaultMoves(board: Board, previousMoves: Move[], lastMove?: Move): Move[];
 }

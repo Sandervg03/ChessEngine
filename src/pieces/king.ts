@@ -11,12 +11,12 @@ export class King extends Piece {
     super(color, coordinate, PieceName.king)
   }
 
-  checkingPieces(board: Board, lastMove?: Move): Piece[] {
+  checkingPieces(board: Board, previousMoves: Move[], lastMove?: Move): Piece[] {
     const checkingPieces: Piece[] = [];
 
     for (const piece of board.pieces) {
       if (piece.color !== this.color) {
-        const pieceMoves: Move[] = piece.getDefaultMoves(board, lastMove);
+        const pieceMoves: Move[] = piece.getDefaultMoves(board, previousMoves, lastMove);
         for (const move of pieceMoves) {
           if (move.to.x === this.coordinate.x && move.to.y === this.coordinate.y) {
             checkingPieces.push(piece)
@@ -28,7 +28,7 @@ export class King extends Piece {
     return checkingPieces;
   }
 
-  getDefaultMoves(board: Board, lastMove?: Move): Move[] {
+  getDefaultMoves(board: Board, previousMoves: Move[], lastMove?: Move): Move[] {
     const moves: Move[] = [];
 
     moves.push(new Move(this, this.coordinate, new Coordinate(this.coordinate.x - 1, this.coordinate.y)))

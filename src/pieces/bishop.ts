@@ -10,7 +10,7 @@ export class Bishop extends Piece {
     super(color, coordinate, PieceName.bishop);
   }
 
-  public getDefaultMoves(board: Board, lastMove?: Move): Move[] {
+  public getDefaultMoves(board: Board, previousMoves: Move[], lastMove?: Move): Move[] {
     const moves: Move[] = [];
 
     const directions = [
