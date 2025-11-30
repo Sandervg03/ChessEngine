@@ -10,7 +10,7 @@ import { Rook } from "./rook";
 export class King extends Piece {
   
   constructor(color: PieceColor, coordinate: Coordinate) {
-    super(color, coordinate, PieceName.king)
+    super(color, coordinate, PieceName.king, "♔")
   }
 
   checkingPieces(board: Board, previousMoves: Move[], lastMove?: Move): Piece[] {

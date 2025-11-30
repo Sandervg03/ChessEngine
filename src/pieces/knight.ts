@@ -8,7 +8,7 @@ import { Piece } from './piece';
 export class Knight extends Piece {
 
   constructor(color: PieceColor, coordinate: Coordinate) {
-    super(color, coordinate, PieceName.knight);
+    super(color, coordinate, PieceName.knight, "♘");
   }
 
   public getDefaultMoves(board: Board, previousMoves: Move[], lastMove?: Move): Move[] {

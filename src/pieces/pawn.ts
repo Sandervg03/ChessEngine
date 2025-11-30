@@ -16,7 +16,7 @@ export class Pawn extends Piece {
   }
 
   constructor(color: PieceColor, coordinate: Coordinate) {
-    super(color, coordinate, PieceName.pawn);
+    super(color, coordinate, PieceName.pawn, "♙");
   }
 
   public getDefaultMoves(board: Board, previousMoves: Move[], lastMove?: Move): Move[] {

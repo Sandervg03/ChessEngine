@@ -8,9 +8,10 @@ export abstract class Piece {
   color: PieceColor;
   coordinate: Coordinate;
   name: PieceName;
+  icon: string;
 
-  constructor(color: PieceColor, coordinate: Coordinate, name: PieceName) {
-    (this.color = color), (this.coordinate = coordinate), (this.name = name);
+  constructor(color: PieceColor, coordinate: Coordinate, name: PieceName, icon: string) {
+    (this.color = color), (this.coordinate = coordinate), (this.name = name), (this.icon = icon);
   }
 
   clone(): Piece {
