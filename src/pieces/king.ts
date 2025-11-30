@@ -49,10 +49,10 @@ export class King extends Piece {
       rooks.forEach(rook => {
         if (!previousMoves.some(move => move.piece === rook)) {
           if (rook.coordinate.x > this.coordinate.x) {
-            moves.push(new Move(this, this.coordinate, new Coordinate(this.coordinate.x + 2, this.coordinate.y), SpecialMove.castle))
+            moves.push(new Move(this, this.coordinate, new Coordinate(this.coordinate.x + 2, this.coordinate.y), SpecialMove.Castle))
           }
           if (rook.coordinate.x < this.coordinate.x) {
-            moves.push(new Move(this, this.coordinate, new Coordinate(this.coordinate.x - 2, this.coordinate.y), SpecialMove.castle))
+            moves.push(new Move(this, this.coordinate, new Coordinate(this.coordinate.x - 2, this.coordinate.y), SpecialMove.Castle))
           }
         }
       })

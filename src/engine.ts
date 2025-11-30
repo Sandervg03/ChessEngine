@@ -3,7 +3,7 @@ import { Coordinate } from './models/coordinate';
 import { GameState } from './models/gameState';
 import { Move } from './models/move';
 import { PieceColor } from './models/pieceColor';
-import { SpecialMove } from './models/specialMove';
+import { Promotion, SpecialMove } from './models/specialMove';
 import { Pawn } from './pieces/pawn';
 import { Piece } from './pieces/piece';
 import { Rook } from './pieces/rook';
@@ -22,7 +22,7 @@ export class ChessEngine {
     this.gameState = GameState.playing;
   }
 
-  move(move: Move): boolean {
+  move(move: Move, promotion?: Promotion): boolean {
     if (this.gameState !== GameState.playing) {
       return false;
     }
@@ -60,7 +60,7 @@ export class ChessEngine {
     );
 
     if (isValidMove) {
-      if (pickedMove?.special === SpecialMove.castle) {
+      if (pickedMove?.special === SpecialMove.Castle) {
         if (!this.canCastle(pickedMove)) {
           return false;
         }
@@ -72,11 +72,11 @@ export class ChessEngine {
         return false;
       }
 
-      if (pickedMove?.special === SpecialMove.enPassant && pickedMove.piece instanceof Pawn) {
+      if (pickedMove?.special === SpecialMove.EnPassant && pickedMove.piece instanceof Pawn) {
         this.board.removePiece(new Coordinate(move.to.x, move.to.y - pickedMove.piece.direction));
       }
 
-      if (pickedMove?.special === SpecialMove.castle) {
+      if (pickedMove?.special === SpecialMove.Castle) {
         const direction = move.to.x > move.from.x ? 1 : -1;
         const rookFromX = direction === 1 ? this.board.xSize : 1;
         const rookToX = move.to.x - direction;
@@ -95,6 +95,22 @@ export class ChessEngine {
 
       piece.coordinate = move.to;
       this.previousMoves.push(new Move(piece, move.from, move.to));
+
+      if (piece instanceof Pawn) {
+        const isWhitePromotion = piece.color === PieceColor.white && move.to.y === this.board.ySize;
+        const isBlackPromotion = piece.color === PieceColor.black && move.to.y === 1;
+
+        if (isWhitePromotion || isBlackPromotion) {
+          if (!promotion) {
+            promotion = SpecialMove.PromoteQueen;
+          }
+
+          const moveForPromotion = new Move(piece, move.from, move.to);
+          if (!this.board.promotePawn(moveForPromotion, promotion)) {
+            return false;
+          }
+        }
+      }
 
       this.confirmGameState();
 
@@ -118,7 +134,7 @@ export class ChessEngine {
     const moves: Move[] = piece.getDefaultMoves(this.board, this.previousMoves, this.previousMove);
 
     let validMoves: Move[] = moves.filter((move) => {
-      if (move.special === SpecialMove.castle) {
+      if (move.special === SpecialMove.Castle) {
         if (!this.canCastle(move)) {
           return false;
         }
@@ -191,7 +207,7 @@ export class ChessEngine {
       clonedBoard.removePiece(move.to);
     }
 
-    if (move.special === SpecialMove.enPassant && pieceToMove instanceof Pawn) {
+    if (move.special === SpecialMove.EnPassant && pieceToMove instanceof Pawn) {
       clonedBoard.removePiece(new Coordinate(move.to.x, move.to.y - pieceToMove.direction));
     }
 
