@@ -22,12 +22,12 @@ export class ChessEngine {
     this.gameState = GameState.playing;
   }
 
-  move(from: Coordinate, to: Coordinate): boolean {
+  move(move: Move): boolean {
     if (this.gameState !== GameState.playing) {
       return false;
     }
 
-    const piece = this.board.getPieceAt(from);
+    const piece = this.board.getPieceAt(move.from);
 
     if (!this.previousMove && piece?.color !== PieceColor.white) {
       return false;
@@ -44,19 +44,19 @@ export class ChessEngine {
     const moves = piece.getDefaultMoves(this.board, this.previousMoves, this.previousMove);
 
     const isValidMove = moves.some(
-      (move) =>
-        move.from.x === from.x &&
-        move.from.y === from.y &&
-        move.to.x === to.x &&
-        move.to.y === to.y,
+      (validMove) =>
+        validMove.from.x === move.from.x &&
+        validMove.from.y === move.from.y &&
+        validMove.to.x === move.to.x &&
+        validMove.to.y === move.to.y,
     );
 
     const pickedMove = moves.find(
-      (move) =>
-        move.from.x === from.x &&
-        move.from.y === from.y &&
-        move.to.x === to.x &&
-        move.to.y === to.y,
+      (pickedMove) =>
+        pickedMove.from.x === move.from.x &&
+        pickedMove.from.y === move.from.y &&
+        pickedMove.to.x === move.to.x &&
+        pickedMove.to.y === move.to.y,
     );
 
     if (isValidMove) {
@@ -72,29 +72,29 @@ export class ChessEngine {
         return false;
       }
 
-      if (pickedMove?.special === SpecialMove['en passant'] && pickedMove.piece instanceof Pawn) {
-        this.board.removePiece(new Coordinate(to.x, to.y - pickedMove.piece.direction));
+      if (pickedMove?.special === SpecialMove.enPassant && pickedMove.piece instanceof Pawn) {
+        this.board.removePiece(new Coordinate(move.to.x, move.to.y - pickedMove.piece.direction));
       }
 
       if (pickedMove?.special === SpecialMove.castle) {
-        const direction = to.x > from.x ? 1 : -1;
+        const direction = move.to.x > move.from.x ? 1 : -1;
         const rookFromX = direction === 1 ? this.board.xSize : 1;
-        const rookToX = to.x - direction;
+        const rookToX = move.to.x - direction;
 
-        const rook = this.board.getPieceAt(new Coordinate(rookFromX, from.y));
+        const rook = this.board.getPieceAt(new Coordinate(rookFromX, move.from.y));
         if (rook) {
-          rook.coordinate = new Coordinate(rookToX, from.y);
+          rook.coordinate = new Coordinate(rookToX, move.from.y);
         } else {
-          return false
+          return false;
         }
       }
 
-      if (this.board.getPieceAt(to)) {
-        this.board.removePiece(to);
+      if (this.board.getPieceAt(move.to)) {
+        this.board.removePiece(move.to);
       }
 
-      piece.coordinate = to;
-      this.previousMoves.push(new Move(piece, from, to));
+      piece.coordinate = move.to;
+      this.previousMoves.push(new Move(piece, move.from, move.to));
 
       this.confirmGameState();
 
@@ -108,27 +108,27 @@ export class ChessEngine {
     if (this.gameState !== GameState.playing) {
       return [];
     }
-  
+
     const piece = this.board.getPieceAt(from);
-  
+
     if (!piece) {
       return [];
     }
-  
+
     const moves: Move[] = piece.getDefaultMoves(this.board, this.previousMoves, this.previousMove);
-  
+
     let validMoves: Move[] = moves.filter((move) => {
       if (move.special === SpecialMove.castle) {
         if (!this.canCastle(move)) {
           return false;
         }
       }
-  
+
       const simulatedBoard: Board = this.simulateMove(move);
-  
+
       return !simulatedBoard.isKingChecked(piece, this.previousMoves, move);
     });
-  
+
     return validMoves.map((move) => new Coordinate(move.to.x, move.to.y));
   }
 
@@ -136,43 +136,43 @@ export class ChessEngine {
     const from = move.from;
     const to = move.to;
     const direction = to.x > from.x ? 1 : -1;
-  
+
     if (this.board.isKingChecked(move.piece, this.previousMoves, this.previousMove!)) {
       return false;
     }
-  
+
     const rookX = direction === 1 ? this.board.xSize : 1;
     const rookCoord = new Coordinate(rookX, from.y);
     const rookPiece = this.board.getPieceAt(rookCoord);
-  
+
     if (!(rookPiece instanceof Rook && rookPiece.color === move.piece.color)) {
       return false;
     }
-  
+
     let currentX = from.x + direction;
     while (currentX !== rookX) {
       const checkCoord = new Coordinate(currentX, from.y);
-      
+
       if (!this.board.coordinateIsEmpty(checkCoord)) {
         return false;
       }
-  
+
       currentX += direction;
     }
-    
+
     currentX = from.x + direction;
     while (currentX !== to.x + direction) {
       const checkCoord = new Coordinate(currentX, from.y);
       const simulatedMove = new Move(move.piece, from, checkCoord);
       const simulatedBoard = this.simulateMove(simulatedMove);
-  
+
       if (simulatedBoard.isKingChecked(move.piece, this.previousMoves, simulatedMove)) {
         return false;
       }
-  
+
       currentX += direction;
     }
-  
+
     return true;
   }
 
@@ -191,7 +191,7 @@ export class ChessEngine {
       clonedBoard.removePiece(move.to);
     }
 
-    if (move.special === SpecialMove['en passant'] && pieceToMove instanceof Pawn) {
+    if (move.special === SpecialMove.enPassant && pieceToMove instanceof Pawn) {
       clonedBoard.removePiece(new Coordinate(move.to.x, move.to.y - pieceToMove.direction));
     }
 

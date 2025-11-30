@@ -75,7 +75,7 @@ export class Pawn extends Piece {
           this,
           this.coordinate,
           new Coordinate(lastMove.to.x, lastMove.to.y + this.direction),
-          SpecialMove['en passant'],
+          SpecialMove.enPassant,
         ),
       );
     }

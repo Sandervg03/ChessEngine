@@ -1,4 +1,8 @@
 export enum SpecialMove {
-    "en passant",
-    "castle"
+    "enPassant",
+    "castle",
+    "promoteRook",
+    "promoteKnight",
+    "promoteBishop",
+    "promoteQueen"
 }
