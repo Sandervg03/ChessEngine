@@ -9,13 +9,14 @@ import { Coordinate } from './coordinate';
 import { Move } from './move';
 import { PieceColor } from './pieceColor';
 import { Promotion, SpecialMove } from './specialMove';
+import { defaultPiecesSetup } from '../util/defaultPiecesSetup';
 
 export class Board {
   private _pieces: Piece[];
   private _xSize: number;
   private _ySize: number;
 
-  constructor(pieces: Piece[], xSize: number = 8, ySize: number = 8) {
+  constructor(pieces: Piece[] = defaultPiecesSetup, xSize: number = 8, ySize: number = 8) {
     this._pieces = pieces;
     this._xSize = xSize;
     this._ySize = ySize;
