@@ -62,7 +62,7 @@ ChessEngine/
 │   │   ├── queen.ts           # Queen implementation
 │   │   └── king.ts            # King implementation
 │   └── util/
-│   │   └── defaultPiecesSetup.ts # The standard chess pieces setup
+│       └── defaultPiecesSetup.ts # The standard chess pieces setup
 └── README.md                  # This file
 ```
 
