@@ -90,9 +90,10 @@ npm run build
 
 Initializing your board and engine
 ```typescript
-import { ChessEngine, Board, Pawn, PieceColor } from "chess-engine";
+import { ChessEngine, Board, Pawn, PieceColor } from "ts-chess-engine";
 
-// Create a board with pieces. When you don't declare your pieces yourself, it will have the standard chess setup listed in src/util/defaultPiecesSetup.ts.
+// Create a board with pieces. When you don't declare your pieces yourself, 
+// the board will have the standard chess setup listed in src/util/defaultPiecesSetup.ts.
 const board = new Board([
   new Pawn(PieceColor.white, new Coordinate(1, 1))
   /* your pieces */
@@ -113,6 +114,15 @@ const piece = engine.board.getPieceAt(new Coordinate(1, 1));
 const from = new Coordinate(1, 1);
 const to = new Coordinate(1, 3);
 const success = engine.move(new Move(piece, from, to));
+```
+
+Pawn promotion
+```typescript
+import { SpecialMove } from "ts-chess-engine"
+
+if (to.y === 8 /* or 1 for black */) {
+  const success = engine.move(new Move(piece, from, to), SpecialMove.PromoteQueen)
+}
 ```
 
 Keeping track of the game
